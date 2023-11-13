@@ -7,6 +7,7 @@
     <modules>
         <module>java-path-core-collections</module>
         <module>java-path-core-exception</module>
+        <module>java-path-core-stream</module>
     </modules>
 
     <!-- Versioning -->
@@ -33,7 +34,70 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <log4j2.version>2.18.0</log4j2.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <disruptor.version>3.4.4</disruptor.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--
+            Due to a break in compatibility in the SLF4J binding, as of Log4J2 release 2.11.1, we need to
+            use the following plugin in case of Java 1.8 or greater.
+
+            Log4j API and Core implementation along with Slf4j libraries required are implicit
+            dependencies.
+            -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j18-impl</artifactId>
+                <version>${log4j2.version}</version>
+            </dependency>
+            <!--
+            This is to stop receiving errors about failing to load class "org.slf4j.impl.StaticLoggerBinder"
+            -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${slf4j.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-api</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!--
+            Asynchronous Logging @see https://logging.apache.org/log4j/2.x/manual/async.html
+            Hint:
+            Don't forget to set system property
+            -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+             to make all loggers asynchronous
+            -->
+            <dependency>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${disruptor.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- Dependencies -->
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j18-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <!-- Plugins and corresponding configuration used by all modules -->
