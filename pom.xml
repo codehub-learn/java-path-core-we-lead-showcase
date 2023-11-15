@@ -8,6 +8,7 @@
         <module>java-path-core-collections</module>
         <module>java-path-core-exception</module>
         <module>java-path-core-stream</module>
+        <module>java-path-core-database</module>
     </modules>
 
     <!-- Versioning -->
@@ -124,7 +125,6 @@
                                 </rules>
                             </configuration>
                         </execution>
-                        <!--
                         <execution>
                             <id>ban-bad-log4j-versions</id>
                             <phase>validate</phase>
@@ -142,7 +142,6 @@
                                 <fail>true</fail>
                             </configuration>
                         </execution>
-                        -->
                     </executions>
                 </plugin>
                 <plugin>
